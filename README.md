@@ -1,5 +1,8 @@
 # Getdown Maven Plugin
 
+A Maven plugin for the brilliant [Getdown](https://github.com/threerings/getdown/). Parts of it were loosely
+based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-maven-plugin/),
+
 ## Features
 
 * Gathers dependencies
@@ -25,25 +28,41 @@
 
 ## Usage
 
-Add the following to your pom.xml :-
+Add the following to your pom.xml. For now the SNAPSHOT plugin is hosted on Github itself
+(using the instructions found here https://engineering.groupon.com/2014/misc/maven-and-github-forking-a-github-repository-and-hosting-its-maven-artifacts/) :-
 
 ```
-<plugin>
-	<groupId>org.icestuff</groupId>
-	<artifactId>getdown-maven-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<executions>
-		<execution>
-			<phase>package</phase>
-			<goals>
-				<goal>updates</goal>
-			</goals>
-			<configuration>
-				<appbase>http://myserver.com/myapp/getdown</appbase>				
-			</configuration>
-		</execution>
-	</executions>
-</plugin>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>getdown-maven-plugin-mvn-repo</id>
+			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+```
+
+And add the plugin configuration and bind it to the package phase.
+
+```
+	<plugin>
+		<groupId>org.icestuff</groupId>
+		<artifactId>getdown-maven-plugin</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<executions>
+			<execution>
+				<phase>package</phase>
+				<goals>
+					<goal>updates</goal>
+				</goals>
+				<configuration>
+					<appbase>http://myserver.com/myapp/getdown</appbase>				
+				</configuration>
+			</execution>
+		</executions>
+	</plugin>
 ```
 
 The run the package phase :-
@@ -60,13 +79,13 @@ This will produce your updates directory in *target/getdown*.
 
 | Key                    | Default | Descriptions |
 | --- | --- | --- |
-| appbase | **Required** | The HTTP URL of the update directory. | 
-| libPath | **Root of appbase** | The subdirectory under appbase under which the jar files will be stored. | 
-| mainClass | **Required** | The Java class name that contains the `main(String[] args)` method. |
+| appbase | Required | The HTTP URL of the update directory. | 
+| libPath | Root of appbase | The subdirectory under appbase under which the jar files will be stored. | 
+| mainClass | Required | The Java class name that contains the `main(String[] args)` method. |
 | outputJarVersions | false | Whether to include version numbers in the file names created. |
 | verbose | false | Be verbose about the build. |
-| appargs | **None** | List of **apparg** elements, each one an argument to pass to the *mainClass* when launched |
-| jvmargs | **None** | List of **jvmarg** elements, each one an argument to pass to the JVM when launched |
+| appargs | None | List of **apparg** elements, each one an argument to pass to the *mainClass* when launched |
+| jvmargs | None | List of **jvmarg** elements, each one an argument to pass to the JVM when launched |
 | ignoreMissingMain | false | If the plugin is added to a project of type *pom*, it may fail to find the mainClass, although this won't necessarily prevent your app from running. Set this to true to ignore this error.|
 | workDirectory | ${project.build.directory}/getdown | Location where update files end up. |
 | excludeTransitive | false | Whether to exclude transitive dependencies. | 
@@ -96,7 +115,8 @@ Configuration of the download / launch UI.
 
 ## Examples
 
-Here are some complete example projects. You can find the complete projects files at LINK HERE
+Here are some complete example projects. You can find the full source for these at [getdown-maven-example1](https://github.com/rockfireredmoon/getdown-maven-example1)
+and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-example2)  
 
 ### Example 1
 
@@ -149,6 +169,16 @@ Here are some complete example projects. You can find the complete projects file
 			</plugin>
 		</plugins>
 	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>getdown-maven-plugin-mvn-repo</id>
+			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 </project>
 ```
 
@@ -466,6 +496,16 @@ The following example uses some other Maven plugins to spit out stub installers 
 			</plugin>
 		</plugins>
 	</build>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>getdown-maven-plugin-mvn-repo</id>
+			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 	<repositories>
 		<repository>
 			<id>codehaus-snapshots</id>
