@@ -65,7 +65,7 @@ And add the plugin configuration and bind it to the package phase.
 	</plugin>
 ```
 
-The run the package phase :-
+Then run the package phase :-
 
 ```
 mvn package
@@ -212,7 +212,7 @@ The following example uses some other Maven plugins to spit out stub installers 
 							<goal>applet</goal>
 						</goals>
 						<configuration>
-							<appbase>http://armouree.vm.bytemark.co.uk/myapp/getdown/</appbase>
+							<appbase>http://www.myserver.com/myapp/getdown/</appbase>
 							<libPath>lib</libPath>
 							<mainClass>org.icestuff.getdown.maven.examples.MyApp</mainClass>
 							<outputJarVersions>false</outputJarVersions>
