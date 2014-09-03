@@ -58,7 +58,9 @@ And add the plugin configuration and bind it to the package phase.
 					<goal>updates</goal>
 				</goals>
 				<configuration>
-					<appbase>http://myserver.com/myapp/getdown</appbase>				
+					<!-- This is the minimum required configuration, see below for more -->
+					<appbase>http://myserver.com/myapp/getdown</appbase>	
+					<mainClass>org.icestuff.getdown.maven.examples.MyApp</mainClass>			
 				</configuration>
 			</execution>
 		</executions>
