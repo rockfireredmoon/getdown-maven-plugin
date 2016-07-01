@@ -34,8 +34,8 @@ Add the following to your pom.xml. For now the SNAPSHOT plugin is hosted on Gith
 ```
 	<pluginRepositories>
 		<pluginRepository>
-			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<id>taw-repo</id>
+			<url>http://files.theanubianwar.com/maven/snapshots/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -173,8 +173,8 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 	</build>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<id>taw-repo</id>
+			<url>http://files.theanubianwar.com/maven/snapshots/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -500,8 +500,8 @@ The following example uses some other Maven plugins to spit out stub installers 
 	</build>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<id>taw-repo</id>
+			<url>http://files.theanubianwar.com/maven/snapshots/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
