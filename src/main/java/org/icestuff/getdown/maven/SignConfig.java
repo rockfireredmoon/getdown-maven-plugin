@@ -31,10 +31,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.Signature;
+import java.security.*;
+import java.security.cert.CertificateException;
 
 /**
  * Bean that represents the JarSigner configuration.
@@ -201,12 +199,12 @@ public class SignConfig
     /**
      * Creates a digest file in the specified application directory.
      */
-    public void signDigest (File appdir)
-        throws IOException, GeneralSecurityException
-    {
-        File inputFile = new File(appdir, "digest.txt");
-        File signatureFile = new File(appdir, "digest.txt" + Application.SIGNATURE_SUFFIX);
+    public void signDigest (File appdir) throws IOException, GeneralSecurityException {
+        sign(new File(appdir, "digest.txt"), new File(appdir, "digest.txt" + Application.SIGNATURE_SUFFIX));
+        sign(new File(appdir, "digest2.txt"), new File(appdir, "digest2.txt" + Application.SIGNATURE_SUFFIX));
+    }
 
+    private void sign(File inputFile, File signatureFile) throws KeyStoreException, IOException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, InvalidKeyException, SignatureException {
         // initialize the keystore
         KeyStore store = KeyStore.getInstance(storetype == null ? "JKS" : storetype);
         FileInputStream storeInput = new FileInputStream(getKeystore());
