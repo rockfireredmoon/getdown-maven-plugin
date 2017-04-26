@@ -1,23 +1,6 @@
 package org.icestuff.getdown.maven;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.security.GeneralSecurityException;
-import java.security.KeyStore;
-import java.security.PrivateKey;
-import java.security.Signature;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.apache.commons.codec.binary.Base64;
+import com.threerings.getdown.tools.Digester;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
@@ -25,17 +8,21 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Component;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
 
-import com.threerings.getdown.data.Application;
-import com.threerings.getdown.data.Digest;
-import com.threerings.getdown.tools.Digester;
-import com.threerings.getdown.tools.DigesterTask;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Make deployable Java apps.
@@ -218,7 +205,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
     protected void makeDigestFile() throws IOException,
 	    GeneralSecurityException {
 	getLog().info("Making digest");
-	Digester.createDigest(workDirectory);
+	Digester.createDigest(1, workDirectory);
+	Digester.createDigest(2, workDirectory);
 	if (sign != null) {
 	    getLog().info("Signing digest");
 	    sign.signDigest(workDirectory);
