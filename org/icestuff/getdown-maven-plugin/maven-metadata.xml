@@ -3,10 +3,11 @@
   <groupId>org.icestuff</groupId>
   <artifactId>getdown-maven-plugin</artifactId>
   <versioning>
-    <latest>0.0.1-SNAPSHOT</latest>
+    <latest>0.0.2-SNAPSHOT</latest>
     <versions>
       <version>0.0.1-SNAPSHOT</version>
+      <version>0.0.2-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20140903135747</lastUpdated>
+    <lastUpdated>20170917175653</lastUpdated>
   </versioning>
 </metadata>
