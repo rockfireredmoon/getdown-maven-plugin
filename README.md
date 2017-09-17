@@ -38,8 +38,8 @@ This plugin is currently available as a SNAPSHOT only from the locatioin below  
 ```
 	<pluginRepositories>
 		<pluginRepository>
-			<id>taw-repo</id>
-			<url>http://files.theanubianwar.com/maven/snapshots/</url>
+			<id>getdown-maven-plugin-mvn-repo</id>
+			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -177,8 +177,8 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 	</build>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>taw-repo</id>
-			<url>http://files.theanubianwar.com/maven/snapshots/</url>
+			<id>getdown-maven-plugin-mvn-repo</id>
+			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -504,8 +504,8 @@ The following example uses some other Maven plugins to spit out stub installers 
 	</build>
 	<pluginRepositories>
 		<pluginRepository>
-			<id>taw-repo</id>
-			<url>http://files.theanubianwar.com/maven/snapshots/</url>
+			<id>getdown-maven-plugin-mvn-repo</id>
+			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
