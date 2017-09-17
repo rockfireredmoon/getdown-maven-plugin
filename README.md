@@ -20,6 +20,11 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 * Doesn't yet handle Alternative Entry Points
 * Doesn't yet handle Custom Java Installation
 
+## Changes
+
+* 0.0.1-SNAPSHOT - Initial release
+* 0.0.2-SNAPSHOT - Updated Getdown version. Fixes digest file signing (thaks alapierre). Initial stub icon.
+
 ## Goals
 
 * `updates` Generates update directory
@@ -28,8 +33,7 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 
 ## Usage
 
-Add the following to your pom.xml. For now the SNAPSHOT plugin is hosted on Github itself
-(using the instructions found here https://engineering.groupon.com/2014/misc/maven-and-github-forking-a-github-repository-and-hosting-its-maven-artifacts/) :-
+This plugin is currently available as a SNAPSHOT only from the locatioin below  :-
 
 ```
 	<pluginRepositories>
@@ -50,7 +54,7 @@ And add the plugin configuration and bind it to the package phase.
 	<plugin>
 		<groupId>org.icestuff</groupId>
 		<artifactId>getdown-maven-plugin</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 		<executions>
 			<execution>
 				<phase>package</phase>
@@ -130,13 +134,13 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 	<name>Getdown Maven Example 1</name>
 	<description>Simples Example POM, builds update directory and manifest</description>
 	<groupId>org.icestuff</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.icestuff</groupId>
 				<artifactId>getdown-maven-plugin</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -196,7 +200,7 @@ The following example uses some other Maven plugins to spit out stub installers 
 	<name>Getdown Maven Example 2</name>
 	<description>Advanced Example POM that builds update directory and native installers for Linux, Mac OS X and Windows</description>
 	<groupId>org.icestuff</groupId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<build>
 
 		<plugins>
@@ -204,7 +208,7 @@ The following example uses some other Maven plugins to spit out stub installers 
 			<plugin>
 				<groupId>org.icestuff</groupId>
 				<artifactId>getdown-maven-plugin</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
+				<version>0.0.2-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<phase>package</phase>

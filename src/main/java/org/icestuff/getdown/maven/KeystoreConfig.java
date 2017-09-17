@@ -25,29 +25,24 @@ package org.icestuff.getdown.maven;
  * @author tchemit <chemit@codelutin.com>
  * @since 1.0-beta-3
  */
-public class KeystoreConfig
-{
-    private boolean delete;
+public class KeystoreConfig {
+	private boolean delete;
 
-    private boolean gen;
+	private boolean gen;
 
-    public boolean isDelete()
-    {
-        return delete;
-    }
+	public boolean isDelete() {
+		return delete;
+	}
 
-    public void setDelete( boolean delete )
-    {
-        this.delete = delete;
-    }
+	public void setDelete(boolean delete) {
+		this.delete = delete;
+	}
 
-    public boolean isGen()
-    {
-        return gen;
-    }
+	public boolean isGen() {
+		return gen;
+	}
 
-    public void setGen( boolean gen )
-    {
-        this.gen = gen;
-    }
+	public void setGen(boolean gen) {
+		this.gen = gen;
+	}
 }

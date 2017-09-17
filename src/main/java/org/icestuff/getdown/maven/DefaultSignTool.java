@@ -42,252 +42,199 @@ import java.net.URI;
  * @author tchemit <chemit@codelutin.com>
  * @since 1.0-beta-3
  */
-@Component( role = SignTool.class, hint = "default" )
-public class DefaultSignTool
-    extends AbstractLogEnabled
-    implements SignTool
-{
+@Component(role = SignTool.class, hint = "default")
+public class DefaultSignTool extends AbstractLogEnabled implements SignTool {
 
-    /**
-     * The component to invoke jarsigner command.
-     */
-    @Requirement
-    private JarSigner jarSigner;
+	/**
+	 * The component to invoke jarsigner command.
+	 */
+	@Requirement
+	private JarSigner jarSigner;
 
-    /**
-     * The component to invoke keyTool command.
-     */
-    @Requirement
-    private KeyTool keyTool;
+	/**
+	 * The component to invoke keyTool command.
+	 */
+	@Requirement
+	private KeyTool keyTool;
 
-    /**
-     * {@inheritDoc}
-     */
-    public void generateKey( SignConfig config, File keystoreFile )
-        throws MojoExecutionException
-    {
-        KeyToolGenerateKeyPairRequest request = config.createKeyGenRequest( keystoreFile );
+	/**
+	 * {@inheritDoc}
+	 */
+	public void generateKey(SignConfig config, File keystoreFile) throws MojoExecutionException {
+		KeyToolGenerateKeyPairRequest request = config.createKeyGenRequest(keystoreFile);
 
-        try
-        {
-            JavaToolResult result = keyTool.execute( request );
+		try {
+			JavaToolResult result = keyTool.execute(request);
 
-            CommandLineException exception = result.getExecutionException();
-            if ( exception != null )
-            {
-                throw new MojoExecutionException( "Could not generate key store " + keystoreFile, exception );
-            }
-            int exitCode = result.getExitCode();
-            if ( exitCode != 0 )
-            {
-                throw new MojoExecutionException(
-                    "Could not generate key store " + keystoreFile + ", use -X to have detail of error" );
-            }
-        }
-        catch ( JavaToolException e )
-        {
-            throw new MojoExecutionException( "Could not find keytool", e );
-        }
-    }
+			CommandLineException exception = result.getExecutionException();
+			if (exception != null) {
+				throw new MojoExecutionException("Could not generate key store " + keystoreFile, exception);
+			}
+			int exitCode = result.getExitCode();
+			if (exitCode != 0) {
+				throw new MojoExecutionException(
+						"Could not generate key store " + keystoreFile + ", use -X to have detail of error");
+			}
+		} catch (JavaToolException e) {
+			throw new MojoExecutionException("Could not find keytool", e);
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void sign( SignConfig config, File jarFile, File signedJar )
-        throws MojoExecutionException
-    {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void sign(SignConfig config, File jarFile, File signedJar) throws MojoExecutionException {
 
-        JarSignerRequest request = config.createSignRequest( jarFile, signedJar );
+		JarSignerRequest request = config.createSignRequest(jarFile, signedJar);
 
-        try
-        {
-            JavaToolResult result = jarSigner.execute( request );
+		try {
+			JavaToolResult result = jarSigner.execute(request);
 
-            CommandLineException exception = result.getExecutionException();
-            if ( exception != null )
-            {
-                throw new MojoExecutionException( "Could not sign jar " + jarFile, exception );
-            }
-            int exitCode = result.getExitCode();
-            if ( exitCode != 0 )
-            {
-                throw new MojoExecutionException(
-                    "Could not sign jar " + jarFile + ", use -X to have detail of error" );
-            }
-        }
-        catch ( JavaToolException e )
-        {
-            throw new MojoExecutionException( "Could not find jarSigner", e );
-        }
-    }
+			CommandLineException exception = result.getExecutionException();
+			if (exception != null) {
+				throw new MojoExecutionException("Could not sign jar " + jarFile, exception);
+			}
+			int exitCode = result.getExitCode();
+			if (exitCode != 0) {
+				throw new MojoExecutionException("Could not sign jar " + jarFile + ", use -X to have detail of error");
+			}
+		} catch (JavaToolException e) {
+			throw new MojoExecutionException("Could not find jarSigner", e);
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void verify( SignConfig config, File jarFile, boolean certs )
-        throws MojoExecutionException
-    {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void verify(SignConfig config, File jarFile, boolean certs) throws MojoExecutionException {
 
-        JarSignerRequest request = config.createVerifyRequest( jarFile, certs );
+		JarSignerRequest request = config.createVerifyRequest(jarFile, certs);
 
-        try
-        {
-            JavaToolResult result = jarSigner.execute( request );
+		try {
+			JavaToolResult result = jarSigner.execute(request);
 
-            CommandLineException exception = result.getExecutionException();
-            if ( exception != null )
-            {
-                throw new MojoExecutionException( "Could not verify jar " + jarFile, exception );
-            }
-            int exitCode = result.getExitCode();
-            if ( exitCode != 0 )
-            {
-                throw new MojoExecutionException(
-                    "Could not verify jar " + jarFile + ", use -X to have detail of error" );
-            }
-        }
-        catch ( JavaToolException e )
-        {
-            throw new MojoExecutionException( "Could not find jarSigner", e );
-        }
-    }
+			CommandLineException exception = result.getExecutionException();
+			if (exception != null) {
+				throw new MojoExecutionException("Could not verify jar " + jarFile, exception);
+			}
+			int exitCode = result.getExitCode();
+			if (exitCode != 0) {
+				throw new MojoExecutionException(
+						"Could not verify jar " + jarFile + ", use -X to have detail of error");
+			}
+		} catch (JavaToolException e) {
+			throw new MojoExecutionException("Could not find jarSigner", e);
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isJarSigned( File jarFile )
-        throws MojoExecutionException
-    {
-        try
-        {
-            return JarSignerUtil.isArchiveSigned( jarFile );
-        }
-        catch ( IOException e )
-        {
-            throw new MojoExecutionException( "Could not verifiy that jar is signed or not", e );
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isJarSigned(File jarFile) throws MojoExecutionException {
+		try {
+			return JarSignerUtil.isArchiveSigned(jarFile);
+		} catch (IOException e) {
+			throw new MojoExecutionException("Could not verifiy that jar is signed or not", e);
+		}
 
-    }
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void unsign( File jarFile, boolean verbose )
-        throws MojoExecutionException
-    {
+	/**
+	 * {@inheritDoc}
+	 */
+	public void unsign(File jarFile, boolean verbose) throws MojoExecutionException {
 
-        if ( isJarSigned( jarFile ) )
-        {
+		if (isJarSigned(jarFile)) {
 
-            // unsign jar
+			// unsign jar
 
-            verboseLog( verbose, "Unsign jar " + jarFile );
-            try
-            {
-                JarSignerUtil.unsignArchive( jarFile );
-            }
-            catch ( IOException e )
-            {
+			verboseLog(verbose, "Unsign jar " + jarFile);
+			try {
+				JarSignerUtil.unsignArchive(jarFile);
+			} catch (IOException e) {
 
-                throw new MojoExecutionException( "Could not find unsign jar " + jarFile, e );
-            }
-        }
-        else
-        {
+				throw new MojoExecutionException("Could not find unsign jar " + jarFile, e);
+			}
+		} else {
 
-            // not signed jar do nothing
-            verboseLog( verbose, "Jar " + jarFile + " is not signed." );
-        }
-    }
+			// not signed jar do nothing
+			verboseLog(verbose, "Jar " + jarFile + " is not signed.");
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public void deleteKeyStore( File keystore, boolean verbose )
-    {
-        if ( keystore.exists() )
-        {
-            if ( keystore.delete() )
-            {
-                infoOrDebug( verbose, "deleted keystore from: " + keystore.getAbsolutePath() );
-            }
-            else
-            {
-                getLogger().warn( "Couldn't delete keystore from: " + keystore.getAbsolutePath() );
-            }
-        }
-        else
-        {
-            infoOrDebug( verbose, "Skipping deletion of non existing keystore: " + keystore.getAbsolutePath() );
-        }
-    }
+	/**
+	 * {@inheritDoc}
+	 */
+	public void deleteKeyStore(File keystore, boolean verbose) {
+		if (keystore.exists()) {
+			if (keystore.delete()) {
+				infoOrDebug(verbose, "deleted keystore from: " + keystore.getAbsolutePath());
+			} else {
+				getLogger().warn("Couldn't delete keystore from: " + keystore.getAbsolutePath());
+			}
+		} else {
+			infoOrDebug(verbose, "Skipping deletion of non existing keystore: " + keystore.getAbsolutePath());
+		}
+	}
 
-    /**
-     * {@inheritDoc}
-     */
-    public File getKeyStoreFile( String keystore, File workingKeystore, ClassLoader classLoader )
-        throws MojoExecutionException
-    {
+	/**
+	 * {@inheritDoc}
+	 */
+	public File getKeyStoreFile(String keystore, File workingKeystore, ClassLoader classLoader)
+			throws MojoExecutionException {
 
-        File result;
+		File result;
 
-        URI keystoreURI = null;
-        try
-        {
-            keystoreURI = URI.create( keystore );
-        }
-        catch ( IllegalArgumentException e )
-        {
-            // Windows paths like C:\Users throw an IAE due to the '\'  
-        }
+		URI keystoreURI = null;
+		try {
+			keystoreURI = URI.create(keystore);
+		} catch (IllegalArgumentException e) {
+			// Windows paths like C:\Users throw an IAE due to the '\'
+		}
 
-        if ( keystoreURI == null || keystoreURI.getScheme() == null )
-        {
+		if (keystoreURI == null || keystoreURI.getScheme() == null) {
 
-            // consider it as a simple file
-            result = new File( keystore );
-        }
-        else
-        {
-            // copy stream to working keystore
-            result = workingKeystore;
+			// consider it as a simple file
+			result = new File(keystore);
+		} else {
+			// copy stream to working keystore
+			result = workingKeystore;
 
-            // make parent directory if required
-            Util.makeDirectoryIfNecessary( result.getParentFile() );
+			// make parent directory if required
+			Util.makeDirectoryIfNecessary(result.getParentFile());
 
-            // copy keystore  to workingKeystore
-            Util.copyResources(keystoreURI, classLoader, result );
-        }
-        return result;
-    }
+			// copy keystore to workingKeystore
+			Util.copyResources(keystoreURI, classLoader, result);
+		}
+		return result;
+	}
 
-    /**
-     * Log as info when verbose or info is enabled, as debug otherwise.
-     *
-     * @param verbose verbose level
-     * @param msg     message to log
-     */
-    protected void verboseLog( boolean verbose, String msg )
-    {
-        infoOrDebug( verbose || getLogger().isInfoEnabled(), msg );
-    }
+	/**
+	 * Log as info when verbose or info is enabled, as debug otherwise.
+	 *
+	 * @param verbose
+	 *            verbose level
+	 * @param msg
+	 *            message to log
+	 */
+	protected void verboseLog(boolean verbose, String msg) {
+		infoOrDebug(verbose || getLogger().isInfoEnabled(), msg);
+	}
 
-    /**
-     * Log a message as info or debug.
-     *
-     * @param info if set to true, log as info(), otherwise as debug()
-     * @param msg  message to log
-     */
-    private void infoOrDebug( boolean info, String msg )
-    {
-        if ( info )
-        {
-            getLogger().info( msg );
-        }
-        else
-        {
-            getLogger().debug( msg );
-        }
-    }
+	/**
+	 * Log a message as info or debug.
+	 *
+	 * @param info
+	 *            if set to true, log as info(), otherwise as debug()
+	 * @param msg
+	 *            message to log
+	 */
+	private void infoOrDebug(boolean info, String msg) {
+		if (info) {
+			getLogger().info(msg);
+		} else {
+			getLogger().debug(msg);
+		}
+	}
 
 }
