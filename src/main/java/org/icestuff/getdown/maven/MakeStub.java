@@ -63,6 +63,8 @@ public class MakeStub extends AbstractGetdownMojo {
 			writer.println("# Resources");
 			writeUIResources(writer);
 			writer.println();
+			writeJavaConfiguration(writer);
+			writeTrackingConfiguration(writer);
 		} finally {
 			writer.close();
 		}

@@ -48,6 +48,12 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	@Parameter
 	protected UiConfig ui = new UiConfig();
 
+	@Parameter
+	protected JavaConfig java = new JavaConfig();
+
+	@Parameter
+	protected TrackingConfig tracking = new TrackingConfig();
+
 	/**
 	 * The path where the resources are placed within the getdown structure.
 	 */
@@ -135,6 +141,78 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 		}
 	}
 
+	protected void writeTrackingConfiguration(PrintWriter writer) {
+		if (tracking.url != null) {
+
+			writer.println("# Tracking Configuration");
+			writer.println(String.format("tracking_url = %s", tracking.url));
+			if (tracking.urlSuffix != null) {
+				writer.println(String.format("tracking_url_suffix = %s", tracking.urlSuffix));
+			}
+			if (tracking.percents != null) {
+				StringBuilder b = new StringBuilder();
+				for (int i : tracking.percents) {
+					if (b.length() > 0)
+						b.append(", ");
+					b.append(i);
+				}
+				writer.println(String.format("tracking_percents = %s", b.toString()));
+			}
+			if (tracking.cookieName != null) {
+				writer.println(String.format("tracking_cookie_name = %s", tracking.cookieName));
+			}
+			if (tracking.cookieProperty != null) {
+				writer.println(String.format("tracking_cookie_property = %s", tracking.cookieProperty));
+			}
+			writer.println();
+		}
+	}
+
+	protected void writeJavaConfiguration(PrintWriter writer) {
+		if (java.version != null || java.minVersion != null || java.maxVersion != null || java.versionRegex != null
+				|| java.versionProp != null || java.downloads != null) {
+			writer.println("# Java Configuration");
+		}
+		if (java.version != null) {
+			writer.println("java_exact_version_required = true");
+			writer.println(String.format("java_min_version = %s", java.version));
+			writer.println();
+		} else {
+			if (java.minVersion != null)
+				writer.println(String.format("java_min_version = %s", java.minVersion));
+			if (java.maxVersion != null)
+				writer.println(String.format("java_max_version = %s", java.maxVersion));
+		}
+		if (java.versionProp != null)
+			writer.println(String.format("java_version_prop = %s", java.versionProp));
+		if (java.versionRegex != null)
+			writer.println(String.format("java_version_regex = %s", java.versionRegex));
+		if (java.downloads != null) {
+			for (JavaDownload r : java.downloads) {
+				writer.println(formatResource("java_location", r));
+			}
+		}
+		if (java.version != null || java.minVersion != null || java.maxVersion != null || java.versionRegex != null
+				|| java.versionProp != null || java.downloads != null) {
+			writer.println();
+		}
+	}
+
+	protected String formatResource(String key, JavaDownload d) {
+		return formatResource(key, d, d.path);
+	}
+
+	protected String formatResource(String key, OsSpecific r, String data) {
+		if (r.getOs() == null)
+			return String.format("%s = %s", key, data);
+		else {
+			if (r.getArch() == null)
+				return String.format("%s = [%s] %s", key, r.getOs(), data);
+			else
+				return String.format("%s = [%s-%s] %s", key, r.getOs(), r.getArch(), data);
+		}
+	}
+
 	protected void writeUIConfiguration(PrintWriter writer) {
 		writer.println("# UI Configuration");
 		if (ui.backgroundImage != null) {
@@ -168,20 +246,17 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	}
 
 	/**
-	 * Computes the path for a file relative to a given base, or fails if the
-	 * only shared directory is the root and the absolute form is better.
+	 * Computes the path for a file relative to a given base, or fails if the only
+	 * shared directory is the root and the absolute form is better.
 	 * 
-	 * @param base
-	 *            File that is the base for the result
-	 * @param name
-	 *            File to be "relativized"
+	 * @param base File that is the base for the result
+	 * @param name File to be "relativized"
 	 * @return the relative name
-	 * @throws IOException
-	 *             if files have no common sub-directories, i.e. at best share
-	 *             the root prefix "/" or "C:\"
+	 * @throws IOException if files have no common sub-directories, i.e. at best
+	 *                     share the root prefix "/" or "C:\"
 	 * 
-	 *             http://stackoverflow.com/questions/204784/how-to-construct-a-
-	 *             relative-path-in-java-from-two-absolute-paths-or-urls
+	 *                     http://stackoverflow.com/questions/204784/how-to-construct-a-
+	 *                     relative-path-in-java-from-two-absolute-paths-or-urls
 	 */
 
 	public static String getRelativePath(File base, File name) throws IOException {
@@ -204,8 +279,7 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	/**
 	 * Log as info when verbose or info is enabled, as debug otherwise.
 	 * 
-	 * @param msg
-	 *            the message to display
+	 * @param msg the message to display
 	 */
 	protected void verboseLog(String msg) {
 		if (verbose) {

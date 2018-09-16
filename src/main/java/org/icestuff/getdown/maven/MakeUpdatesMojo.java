@@ -227,10 +227,7 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 				if (!libPath.equals("")) {
 					name = libPath + "/";
 				}
-				name += s.getArtifactId();
-				if (outputJarVersions) {
-					name += "-" + s.getVersion();
-				}
+				name += getDependencyFileBasename(s, outputJarVersions);
 				name += ".jar";
 				writer.println(String.format("code = %s", name));
 			}
@@ -300,6 +297,12 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 		}
 		if (ui.installError != null) {
 			writer.println(String.format("ui.install_error = %s", ui.installError));
+		}
+		if (ui.hideDecorations) {
+			writer.println(String.format("ui.hide_decorations = %s", true));
+		}
+		if (ui.minShowSeconds != null) {
+			writer.println(String.format("ui.min_show_seconds = %d", ui.minShowSeconds));
 		}
 	}
 

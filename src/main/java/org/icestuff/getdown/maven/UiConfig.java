@@ -87,4 +87,16 @@ public class UiConfig {
 	 */
 	@Parameter(property = "ui.installError")
 	String installError;
+
+	/**
+	 * UI hide decorations
+	 */
+	@Parameter(property = "ui.hideDecorations")
+	boolean hideDecorations;
+
+	/**
+	 * UI min show seconds
+	 */
+	@Parameter(property = "ui.minShowSeconds")
+	Integer minShowSeconds;
 }

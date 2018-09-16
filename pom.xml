@@ -5,7 +5,7 @@
 	<artifactId>getdown-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>Getdown Maven Plugin</name>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 
 	<properties>
 		<github.global.server>github</github.global.server>
@@ -90,7 +90,7 @@
 		<dependency>
 			<groupId>com.threerings</groupId>
 			<artifactId>getdown</artifactId>
-			<version>1.6.2</version>
+			<version>1.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>

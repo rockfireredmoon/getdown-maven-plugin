@@ -11,6 +11,8 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 * Generates your stubs
 * Generates your applet directory (not yet complete)
 * Signs stub for applets
+* Custom Java Installation
+* Tracking Configuration
 
 ## Limitations
 
@@ -18,12 +20,12 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 * Doesn't yet handle Auxiliary Resources
 * Doesn't yet handle Platform-specific Configuration
 * Doesn't yet handle Alternative Entry Points
-* Doesn't yet handle Custom Java Installation
 
 ## Changes
 
 * 0.0.1-SNAPSHOT - Initial release
 * 0.0.2-SNAPSHOT - Updated Getdown version. Fixes digest file signing (thaks alapierre). Initial stub icon.
+* 0.0.3-SNAPSHOT - Fixes problem with classified artifacts. Added Java and Tracking configuration.
 
 ## Goals
 
@@ -33,7 +35,7 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 
 ## Usage
 
-This plugin is currently available as a SNAPSHOT only from the locatioin below  :-
+This plugin is currently available as a SNAPSHOT only from the location below  :-
 
 ```
 	<pluginRepositories>
@@ -54,7 +56,7 @@ And add the plugin configuration and bind it to the package phase.
 	<plugin>
 		<groupId>org.icestuff</groupId>
 		<artifactId>getdown-maven-plugin</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.0.3-SNAPSHOT</version>
 		<executions>
 			<execution>
 				<phase>package</phase>
@@ -80,6 +82,9 @@ mvn package
 This will produce your updates directory in *target/getdown*.
 
 ## Configuration
+
+See https://github.com/threerings/getdown/wiki/Getdown-Dot-Text for the Getdown documentation itself.
+Most of this configuration maps to entries in the getdown.txt file as described there.
 
 ### Basic
 
@@ -118,6 +123,33 @@ Configuration of the download / launch UI.
 | errorBackground | None | Path to image for error background. |
 | macDockIcon | None | Path to image for Mac dock icon. |
 | installError | None | Install error URL. |
+| hideDecorations | false | Whether to hide the window decorations. |
+| minShowSeconds | 5 | Minimum number of seconds to show UI for. |
+
+### Java
+
+Configuration of the Java requirements.
+
+| Key                    | Default | Descriptions |
+| --- | --- | --- |
+| minVersion | None | Minimum required Java version. |
+| maxVersion | None | Maximum required Java version. |
+| version | None | Exact required Java version. |
+| versionProperty | java.version | The system property to extract version from. |
+| versionRegex |  | Regular expression used to extract the version. |
+| downloads | None | List of **download** arguments, each made up of a **path** element, and optional **os** and **arch** elements |
+
+### Java
+
+Configuration of the tracking.
+
+| Key                    | Default | Descriptions |
+| --- | --- | --- |
+| url | None | URL of tracking service. |
+| urlSuffix | None | URL suffix of tracking service. |
+| percents | None | List of **percent** elements, each containing a %age value on which to trigger tracking. |
+| cookieName | None | Name of cookie to add to request. |
+| cookieProperty | None | Property to send as cookie value. |
 
 ## Examples
 
