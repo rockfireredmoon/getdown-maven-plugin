@@ -158,7 +158,7 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 
 ### Example 1
 
-```
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -166,13 +166,13 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 	<name>Getdown Maven Example 1</name>
 	<description>Simples Example POM, builds update directory and manifest</description>
 	<groupId>org.icestuff</groupId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.icestuff</groupId>
 				<artifactId>getdown-maven-plugin</artifactId>
-				<version>0.0.2-SNAPSHOT</version>
+				<version>0.0.3-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -224,7 +224,7 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 
 The following example uses some other Maven plugins to spit out stub installers for Linux, Mac OSX and Windows along with the update directory.
 
-```
+```xml
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -232,7 +232,7 @@ The following example uses some other Maven plugins to spit out stub installers 
 	<name>Getdown Maven Example 2</name>
 	<description>Advanced Example POM that builds update directory and native installers for Linux, Mac OS X and Windows</description>
 	<groupId>org.icestuff</groupId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 	<build>
 
 		<plugins>
