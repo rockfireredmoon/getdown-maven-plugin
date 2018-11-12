@@ -34,17 +34,27 @@
 	</licenses>
 
 	<distributionManagement>
-		<repository>
-			<id>internal.repo</id>
-			<name>Temporary Staging Repository</name>
-			<url>file://${basedir}/../getdown-maven-plugin-repository</url>
-		</repository>
+        <repository>
+	            <id>internal</id>
+	            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
 	</distributionManagement>
 
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<outputDirectory>target/classes</outputDirectory>
+       <pluginManagement>
 		<plugins>
+	                <plugin>
+	                    <groupId>org.apache.maven.plugins</groupId>
+	                    <artifactId>maven-compiler-plugin</artifactId>
+	                    <configuration>
+	                        <source>1.8</source>
+	                        <target>1.8</target>
+	                    </configuration>
+	                </plugin>
+		
+		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-plugin-plugin</artifactId>
@@ -67,6 +77,8 @@
 			</plugin>
 
 		</plugins>
+       </pluginManagement>
+		
 
 	</build>
 
