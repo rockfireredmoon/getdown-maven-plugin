@@ -42,7 +42,7 @@ This plugin is currently available as a SNAPSHOT only from the location below  :
 	<pluginRepositories>
 		<pluginRepository>
 			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<url>https://rawgit.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -211,7 +211,7 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 	<pluginRepositories>
 		<pluginRepository>
 			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<url>https://rawgit.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -538,7 +538,7 @@ The following example uses some other Maven plugins to spit out stub installers 
 	<pluginRepositories>
 		<pluginRepository>
 			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
+			<url>https://rawgit.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
