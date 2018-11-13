@@ -12,8 +12,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
-import org.apache.maven.plugins.annotations.Component;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -21,43 +19,54 @@ import org.apache.maven.project.MavenProject;
  */
 public abstract class AbstractGetdownMojo extends AbstractMojo {
 
-	@Parameter(defaultValue = "${project}", readonly = true)
+	/**
+	 * @parameter(defaultValue = "${project}", readonly = true)
+	 */
 	protected MavenProject project;
 
-	@Parameter(defaultValue = "${plugin}", readonly = true)
+	/**
+	 * @parameter(defaultValue = "${plugin}", readonly = true)
+	 */
 	protected PluginDescriptor plugin;
 
 	/**
-	 * The Sign Config.
+	 * 
+	 * @parameter
 	 */
-	@Parameter
 	protected SignConfig sign;
 
 	/**
 	 * Sign tool.
+	 * @component
 	 */
-	@Component
 	protected SignTool signTool;
 
 	/**
 	 * Enable verbose output.
+	 * @parameter(defaultValue = "false")
 	 */
-	@Parameter(defaultValue = "false")
 	protected boolean verbose;
-
-	@Parameter
+	
+	/**
+	 * @parameter
+	 */
 	protected UiConfig ui = new UiConfig();
 
-	@Parameter
+	/**
+	 * @parameter
+	 */
 	protected JavaConfig java = new JavaConfig();
 
-	@Parameter
+	/**
+	 * @parameter
+	 * 
+	 */
 	protected TrackingConfig tracking = new TrackingConfig();
 
 	/**
 	 * The path where the resources are placed within the getdown structure.
+	 * @parameter(defaultValue = "")
 	 */
-	@Parameter(defaultValue = "")
 	protected String resourceSetsPath;
 
 	/**
@@ -65,8 +74,8 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	 * location was prefixed by {@code classpath:}).
 	 * 
 	 * @since 1.0-beta-4
+	 * @parameter(defaultValue = "${project.compileClasspathElements}", required = true, readonly = true)
 	 */
-	@Parameter(defaultValue = "${project.compileClasspathElements}", required = true, readonly = true)
 	protected List<?> compileClassPath;
 
 	protected abstract File getWorkDirectory();

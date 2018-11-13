@@ -1,18 +1,5 @@
 package org.icestuff.getdown.maven;
 
-import com.threerings.getdown.tools.Digester;
-import org.apache.commons.lang.StringUtils;
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
-import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.maven.plugins.annotations.ResolutionScope;
-import org.codehaus.plexus.util.DirectoryScanner;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,60 +11,74 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
+import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.codehaus.plexus.util.DirectoryScanner;
+
+import com.threerings.getdown.tools.Digester;
+
 /**
  * Make deployable Java apps.
  * @goal updates
- * @Mojo (aggregator = true)
- * @Mojo (requiresDependencyResolution = ResolutionScope.RUNTIME)
+ * @mojo (aggregator = true)
+ * @mojo (requiresDependencyResolution = ResolutionScope.RUNTIME)
  */
 public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 	/**
 	 * The URL from which the client is downloaded.
+	 * @parameter (requeired = true)
+	 *
 	 */
-	@Parameter(required = true)
 	private String appbase;
 
 	/**
 	 * The main class name.
+	 * @parameter(required = true)
 	 */
-	@Parameter(required = true)
 	private String mainClass;
 
 	/**
 	 * The directory in which files will be stored prior to processing.
+	 * @parameter(defaultValue = "${project.build.directory}/getdown", required = true)
 	 */
-	@Parameter(defaultValue = "${project.build.directory}/getdown", required = true)
 	private File workDirectory;
 
 	/**
 	 * The path where the libraries are placed within the getdown structure.
+	 * 
+	 * @parameter (defaultValue =  "")
 	 */
-	@Parameter(defaultValue = "")
 	protected String libPath;
 
 	/**
 	 * The location of the directory (relative or absolute) containing non-jar
 	 * resources that are to be included in the getdown bundle.
+	 * @parameter
 	 */
-	@Parameter
 	private File resourcesDirectory;
 
 	/**
 	 * [optional] transitive dependencies filter - if omitted, the plugin will
 	 * include all transitive dependencies. Provided and test scope dependencies
 	 * are always excluded.
-	 */
-	@Parameter
+	 * @parameter
+	 */ 
 	private Dependencies dependencies;
 	/**
 	 * Set to true to exclude all transitive dependencies.
 	 * 
 	 * @parameter
 	 */
-	@Parameter
 	private boolean excludeTransitive;
-	@Parameter
+	/**
+	 * @parameter
+	 */
 	private boolean ignoreMissingMain;
 
 	/**
@@ -85,14 +86,18 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	 * application and cannot contact the server configured in appbase to check
 	 * for updates. If you add allow_offline = true to your getdown.txt, Getdown
 	 * will ignore such failures and allow the application to be run anyway.
+	 * @parameter(defaultValue = "false")
 	 */
-	@Parameter(defaultValue = "false")
 	private boolean allowOffline;
 
-	@Parameter
+	/**
+	 * @parameter
+	 */
 	private String[] appargs;
 
-	@Parameter
+	/**
+	 * @parameter
+	 */
 	private String[] jvmargs;
 	/**
 	 * When set to true, this flag indicates that a version attribute should be
@@ -102,25 +107,38 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	 * download protocol optimization (see
 	 * http://docs.oracle.com/javase/tutorial
 	 * /deployment/deploymentInDepth/avoidingUnnecessaryUpdateChecks.html).
+	 * @parameter(defaultValue = "false")
 	 */
-	@Parameter(defaultValue = "false")
 	private boolean outputJarVersions;
-
-	@Parameter()
+	/**
+	 * 
+	 * @parameter()
+	 */
 	private ResourceSet[] resourceSets;
 
-	@Parameter()
+	/**
+	 * 
+	 * @parameter()
+	 */
 	private ResourceSet[] uresourceSets;
 
 	public static class ResourceSet {
 
-		@Parameter
+		/**
+		 * @parameter
+		 */
 		private String path;
 
-		@Parameter
+
+		/**
+		 * @parameter
+		 */
 		private String[] includes;
 
-		@Parameter
+
+		/**
+		 * @parameter
+		 */
 		private String[] excludes;
 	}
 

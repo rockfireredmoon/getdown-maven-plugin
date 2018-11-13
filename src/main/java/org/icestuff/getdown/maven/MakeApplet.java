@@ -1,15 +1,10 @@
 package org.icestuff.getdown.maven;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.descriptor.PluginDescriptor;
-import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
 /**
@@ -20,20 +15,24 @@ public class MakeApplet extends AbstractGetdownMojo {
 
 	/**
 	 * The URL from which the client is downloaded.
+	 * @parameter(required = true)
 	 */
-	@Parameter(required = true)
 	private String appbase;
 
 	/**
 	 * The directory in which files will be stored prior to processing.
+	 * @parameter(defaultValue = "${project.build.directory}/getdown-applet", required = true)
 	 */
-	@Parameter(defaultValue = "${project.build.directory}/getdown-applet", required = true)
 	private File workDirectory;
 
-	@Parameter(defaultValue = "${project}", readonly = true)
+	/**
+	 * @parameter(defaultValue = "${project}", readonly = true)
+	 */
 	private MavenProject project;
 
-	@Parameter(defaultValue = "${plugin}", readonly = true)
+	/**
+	 * @parameter(defaultValue = "${plugin}", readonly = true)
+	 */
 	private PluginDescriptor plugin;
 
 	public void execute() throws MojoExecutionException {

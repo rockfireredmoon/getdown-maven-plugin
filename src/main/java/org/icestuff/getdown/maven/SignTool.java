@@ -1,5 +1,7 @@
 package org.icestuff.getdown.maven;
 
+import java.io.File;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -20,8 +22,6 @@ package org.icestuff.getdown.maven;
  */
 
 import org.apache.maven.plugin.MojoExecutionException;
-
-import java.io.File;
 
 /**
  * Tool api for jarsigner operations.

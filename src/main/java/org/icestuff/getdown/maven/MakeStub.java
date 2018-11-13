@@ -17,14 +17,14 @@ public class MakeStub extends AbstractGetdownMojo {
 
 	/**
 	 * The URL from which the client is downloaded.
+	 * @parameter(required = true)
 	 */
-	@Parameter(required = true)
 	private String appbase;
 
 	/**
 	 * The directory in which files will be stored prior to processing.
+	 * @parameter(defaultValue = "${project.build.directory}/getdown-stub", required = true)
 	 */
-	@Parameter(defaultValue = "${project.build.directory}/getdown-stub", required = true)
 	private File workDirectory;
 
 	public void execute() throws MojoExecutionException {
