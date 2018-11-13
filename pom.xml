@@ -13,16 +13,16 @@
 	
 	<description>Creates deployable, updateable java applications using Getdown (https://github.com/threerings/getdown/).</description>
 	<scm>
-		<url>https://github.com/rockfireredmoon/getdown-maven-plugin.git</url>
+		<url>https://github.com/thomasX/getdown-maven-plugin.git</url>
 	</scm>
 	<inceptionYear>2014</inceptionYear>
-	<url>https://github.com/rockfireredmoon/getdown-maven-plugin</url>
+	<url>https://github.com/thomasX/getdown-maven-plugin</url>
 	<organization>
 		<name>Emerald Icemoon</name>
 		<url>https://github.com/rockfireredmoon</url>
 	</organization>
 	<issueManagement>
-		<url>https://github.com/rockfireredmoon/getdown-maven-plugin/issues</url>
+		<url>https://github.com/thomasX/getdown-maven-plugin/issues</url>
 	</issueManagement>
 
 	<licenses>
