@@ -14,8 +14,8 @@ import org.apache.maven.project.MavenProject;
 
 /**
  * Make deployable Java apps.
+ * @goal applet
  */
-@Mojo(name = "applet")
 public class MakeApplet extends AbstractGetdownMojo {
 
 	/**

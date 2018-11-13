@@ -26,8 +26,10 @@ import java.util.List;
 
 /**
  * Make deployable Java apps.
+ * @goal updates
+ * @Mojo (aggregator = true)
+ * @Mojo (requiresDependencyResolution = ResolutionScope.RUNTIME)
  */
-@Mojo(name = "updates", aggregator = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
 public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 	/**

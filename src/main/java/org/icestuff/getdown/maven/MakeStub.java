@@ -11,8 +11,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 
 /**
  * Make deployable Java apps.
+ * @goal stub
  */
-@Mojo(name = "stub")
 public class MakeStub extends AbstractGetdownMojo {
 
 	/**
