@@ -264,6 +264,9 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 					writer.println(String.format("jvmarg = %s", s));
 				}
 			}
+			
+			writeJavaConfiguration(writer);
+			writer.println();
 
 		} finally {
 			writer.close();
