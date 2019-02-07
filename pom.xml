@@ -88,10 +88,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.threerings</groupId>
-			<artifactId>getdown</artifactId>
-			<version>1.7.1</version>
+			<groupId>com.threerings.getdown</groupId>
+			<artifactId>getdown-launcher</artifactId>
+			<version>1.8.2</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>maven-jarsigner</artifactId>
