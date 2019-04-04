@@ -265,6 +265,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 				}
 			}
 
+			writer.println();
+			writeJavaConfiguration(writer);
 		} finally {
 			writer.close();
 		}
