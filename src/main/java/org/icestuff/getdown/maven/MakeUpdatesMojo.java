@@ -243,10 +243,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 			writer.println();
 			writer.println("# Resources");
 			if (resourceSetPaths != null) {
-				if (resourceSetPaths != null) {
-					for (String p : resourceSetPaths) {
-						writer.println(String.format("resource = %s", p));
-					}
+				for (String p : resourceSetPaths) {
+					writer.println(String.format("resource = %s", p));
 				}
 			}
 			writeUIResources(writer);
