@@ -25,11 +25,11 @@ public class MakeStub extends AbstractGetdownMojo {
 	 * The directory in which files will be stored prior to processing.
 	 */
 	@Parameter(defaultValue = "${project.build.directory}/getdown-stub", required = true)
-	private File workDirectory;
+	private File stubWorkDirectory;
 
 	public void execute() throws MojoExecutionException {
-		getLog().debug("using work directory " + workDirectory);
-		Util.makeDirectoryIfNecessary(workDirectory);
+		getLog().debug("using work directory " + stubWorkDirectory);
+		Util.makeDirectoryIfNecessary(stubWorkDirectory);
 		try {
 			copyUIResources();
 			makeConfigFile();
@@ -42,18 +42,18 @@ public class MakeStub extends AbstractGetdownMojo {
 	}
 
 	protected File getWorkDirectory() {
-		return workDirectory;
+		return stubWorkDirectory;
 	}
 
 	protected void copyGetdownClient() throws MojoExecutionException {
 		getLog().info("Copying client jar");
-		Artifact getdown = (Artifact) plugin.getArtifactMap().get("com.threerings:getdown");
-		Util.copyFile(getdown.getFile(), new File(workDirectory, "getdown.jar"));
+        Artifact getdown = (Artifact) plugin.getArtifactMap().get("com.threerings:getdown");
+		Util.copyFile(getdown.getFile(), new File(stubWorkDirectory, "getdown.jar"));
 	}
 
 	protected void makeConfigFile() throws FileNotFoundException {
 		getLog().info("Making stub getdown.txt");
-		PrintWriter writer = new PrintWriter(new File(workDirectory, "getdown.txt"));
+		PrintWriter writer = new PrintWriter(new File(stubWorkDirectory, "getdown.txt"));
 		try {
 			writer.println("# The URL from which the client is downloaded");
 			writer.println(String.format("appbase = %s", appbase));
