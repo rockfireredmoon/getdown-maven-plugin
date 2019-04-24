@@ -224,7 +224,7 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 			for (Artifact s : packagedJnlpArtifacts) {
 				String name = "";
-				if (!libPath.equals("")) {
+				if (libPath != null && !libPath.equals("")) {
 					name = libPath + "/";
 				}
 				name += getDependencyFileBasename(s, outputJarVersions);
