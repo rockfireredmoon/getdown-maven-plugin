@@ -11,7 +11,7 @@ public class JavaDownload implements OsSpecific {
 	String os;
 
 	/**
-	 * One of 'linux', 'windows' or 'mac os x'
+	 * One of 'amd64', 'x86' or 'i386' etc.
 	 */
 	@Parameter(property = "download.arch")
 	String arch;

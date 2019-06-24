@@ -5,7 +5,7 @@
 	<artifactId>getdown-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>Getdown Maven Plugin</name>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.4-SNAPSHOT</version>
 
 	<properties>
 		<github.global.server>github</github.global.server>
@@ -40,7 +40,17 @@
 			<url>file://${basedir}/../getdown-maven-plugin-repository</url>
 		</repository>
 	</distributionManagement>
-
+	<repositories>
+		<!-- Fork of GetDown 1.8.3 -->
+		<repository>
+			<id>github-eskimodev</id>
+			<name>github-eskimodev</name>
+			<url>https://raw.github.com/eskimodev//getdown/mvn-repo/</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<outputDirectory>target/classes</outputDirectory>

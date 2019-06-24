@@ -14,7 +14,6 @@ import org.apache.maven.plugins.annotations.Parameter;
  */
 @Mojo(name = "stub")
 public class MakeStub extends AbstractGetdownMojo {
-
 	/**
 	 * The URL from which the client is downloaded.
 	 */
