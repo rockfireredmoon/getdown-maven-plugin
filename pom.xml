@@ -1,10 +1,12 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.rockfireredmoon</groupId>
 	<artifactId>getdown-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>Getdown Maven Plugin</name>
-	<version>0.9.1-SNAPSHOT</version>
+	<version>0.9.0</version>
 
 	<properties>
 		<github.global.server>github</github.global.server>
@@ -19,6 +21,15 @@
 		<url>https://github.com/rockfireredmoon/getdown-maven-plugin</url>
 		<tag>HEAD</tag>
 	</scm>
+
+	<developers>
+		<developer>
+			<name>Rockfire Redmoon</name>
+			<email>rockfire.redmoon@gmail.com</email>
+			<url>https://github.com/rockfireredmoon</url>
+		</developer>
+	</developers>
+
 
 	<inceptionYear>2014</inceptionYear>
 	<url>https://github.com/rockfireredmoon/getdown-maven-plugin</url>
@@ -49,7 +60,7 @@
 		</repository>
 	</distributionManagement>
 
-	<profiles> 
+	<profiles>
 		<profile>
 			<id>release-sign-artifacts</id>
 			<activation>
