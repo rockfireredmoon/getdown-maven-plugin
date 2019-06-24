@@ -45,6 +45,16 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	@Parameter(defaultValue = "false")
 	protected boolean verbose;
 
+	/**
+	 * The maximum number of downloads allowed to happen at once.
+     * Defaults to the number of cores in your CPU - 1
+     * <p>
+     * If you're having issues, that you suspect are related to concurrency,
+     * setting this to 1 might help.
+	 */
+	@Parameter
+	protected Integer maxConcurrentDownloads;
+
 	@Parameter
 	protected UiConfig ui = new UiConfig();
 
@@ -63,7 +73,7 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	/**
 	 * Compile class-path elements used to search for the keystore (if kestore
 	 * location was prefixed by {@code classpath:}).
-	 * 
+	 *
 	 * @since 1.0-beta-4
 	 */
 	@Parameter(defaultValue = "${project.compileClasspathElements}", required = true, readonly = true)
@@ -198,6 +208,15 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 		}
 	}
 
+
+	protected void writeMaxConcurrentDownloads(PrintWriter writer) {
+		if (maxConcurrentDownloads != null) {
+			writer.println();
+			writer.println("# The maximum number of downloads allowed to happen at the same time.");
+			writer.println(String.format("max_concurrent_downloads = %s", maxConcurrentDownloads));
+		}
+	}
+
 	protected String formatResource(String key, JavaDownload d) {
 		return formatResource(key, d, d.path);
 	}
@@ -248,13 +267,13 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 	/**
 	 * Computes the path for a file relative to a given base, or fails if the only
 	 * shared directory is the root and the absolute form is better.
-	 * 
+	 *
 	 * @param base File that is the base for the result
 	 * @param name File to be "relativized"
 	 * @return the relative name
 	 * @throws IOException if files have no common sub-directories, i.e. at best
 	 *                     share the root prefix "/" or "C:\"
-	 * 
+	 *
 	 *                     http://stackoverflow.com/questions/204784/how-to-construct-a-
 	 *                     relative-path-in-java-from-two-absolute-paths-or-urls
 	 */
@@ -278,7 +297,7 @@ public abstract class AbstractGetdownMojo extends AbstractMojo {
 
 	/**
 	 * Log as info when verbose or info is enabled, as debug otherwise.
-	 * 
+	 *
 	 * @param msg the message to display
 	 */
 	protected void verboseLog(String msg) {

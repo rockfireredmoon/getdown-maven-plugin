@@ -97,13 +97,16 @@
 			<version>3.3</version>
 			<scope>provided</scope>
 		</dependency>
-        <!-- https://github.com/eskimodev/getdown/tree/mvn-repo/com/threerings/getdown/getdown-launcher -->
-        <dependency>
-            <groupId>com.threerings.getdown</groupId>
-            <artifactId>getdown-launcher</artifactId>
-            <version>1.8.3-SNAPSHOT</version>
-        </dependency>
-
+		<dependency>
+			<groupId>com.threerings.getdown</groupId>
+			<artifactId>getdown-launcher</artifactId>
+			<version>1.8.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.threerings.getdown</groupId>
+			<artifactId>getdown-core</artifactId>
+			<version>1.8.2</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>
 			<artifactId>maven-jarsigner</artifactId>

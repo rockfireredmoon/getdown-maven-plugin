@@ -99,7 +99,8 @@ Most of this configuration maps to entries in the getdown.txt file as described 
 | appargs | None | List of **apparg** elements, each one an argument to pass to the *mainClass* when launched |
 | jvmargs | None | List of **jvmarg** elements, each one an argument to pass to the JVM when launched |
 | ignoreMissingMain | false | If the plugin is added to a project of type *pom*, it may fail to find the mainClass, although this won't necessarily prevent your app from running. Set this to true to ignore this error.|
-| workDirectory | ${project.build.directory}/getdown | Location where update files end up. |
+| workDirectory | ${project.build.directory}/getdown | Location where update/applet files end up. |
+| stubWorkDirectory | ${project.build.directory}/getdown-stub | Location where stub files end up. |
 | excludeTransitive | false | Whether to exclude transitive dependencies. | 
 | allowOffline | false | Whether the getdown launcher will allow offline usage. |
 | resources | None | List of **resource** elements, each one a path to an additional resource to include. |
