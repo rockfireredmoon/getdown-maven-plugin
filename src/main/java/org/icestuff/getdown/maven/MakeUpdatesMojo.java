@@ -120,9 +120,6 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	@Parameter()
 	private ResourceSet[] uresourceSets;
 
-	@Parameter()
-	private ResourceSet[] nresourceSets;
-
 	public static class ResourceSet {
 
 		@Parameter
@@ -170,8 +167,6 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 	private List<String> uresourceSetPaths;
 
-	private List<String> nresourceSetPaths;
-
 	private List<String> resourceSetPaths;
 
 	public void execute() throws MojoExecutionException {
@@ -212,9 +207,6 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 		if (uresourceSets != null) {
 			uresourceSetPaths = copyResourceSets(uresourceSets);
 		}
-		if (nresourceSets != null) {
-			nresourceSetPaths = copyResourceSets(nresourceSets);
-		}
 
 		copyUIResources();
 	}
@@ -253,8 +245,10 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 			writer.println();
 			writer.println("# Resources");
 			if (resourceSetPaths != null) {
-				for (String p : resourceSetPaths) {
-					writer.println(String.format("resource = %s", p));
+				if (resourceSetPaths != null) {
+					for (String p : resourceSetPaths) {
+						writer.println(String.format("resource = %s", p));
+					}
 				}
 			}
 			writeUIResources(writer);
@@ -264,14 +258,6 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 				writer.println("# Unpacked Resources");
 				for (String p : uresourceSetPaths) {
 					writer.println(String.format("uresource = %s", p));
-				}
-				writer.println();
-			}
-
-			if (nresourceSetPaths != null) {
-				writer.println("# Native Resources");
-				for (String p : nresourceSetPaths) {
-					writer.println(String.format("nresource = %s", p));
 				}
 				writer.println();
 			}
@@ -288,9 +274,7 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 					writer.println(String.format("jvmarg = %s", s));
 				}
 			}
-
-			writer.println();
-			writeJavaConfiguration(writer);
+			
 			if (maxConcurrentDownloads != null) {
 				writer.println();
 				writer.println("# The maximum number of downloads allowed to happen at the same time.");
