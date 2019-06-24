@@ -1,16 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.icestuff</groupId>
+	<groupId>io.github.rockfireredmoon</groupId>
 	<artifactId>getdown-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>Getdown Maven Plugin</name>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.9.0</version>
 
 	<properties>
 		<github.global.server>github</github.global.server>
+		<getdown.version>1.8.6</getdown.version>
 	</properties>
-	
+
 	<description>Creates deployable, updateable java applications using Getdown (https://github.com/threerings/getdown/).</description>
 	<scm>
 		<url>https://github.com/rockfireredmoon/getdown-maven-plugin.git</url>
@@ -40,17 +42,7 @@
 			<url>file://${basedir}/../getdown-maven-plugin-repository</url>
 		</repository>
 	</distributionManagement>
-	<repositories>
-		<!-- Fork of GetDown 1.8.3 -->
-		<repository>
-			<id>github-eskimodev</id>
-			<name>github-eskimodev</name>
-			<url>https://raw.github.com/eskimodev//getdown/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+	
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<outputDirectory>target/classes</outputDirectory>
@@ -75,7 +67,19 @@
 					</execution>
 				</executions>
 			</plugin>
-
+			<plugin>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>3.0.0-M1</version>
+				<executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 	</build>
@@ -100,12 +104,12 @@
 		<dependency>
 			<groupId>com.threerings.getdown</groupId>
 			<artifactId>getdown-launcher</artifactId>
-			<version>1.8.2</version>
+			<version>${getdown.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.threerings.getdown</groupId>
 			<artifactId>getdown-core</artifactId>
-			<version>1.8.2</version>
+			<version>${getdown.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.shared</groupId>

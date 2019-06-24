@@ -27,43 +27,25 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 * 0.0.2-SNAPSHOT - Updated Getdown version. Fixes digest file signing (thaks alapierre). Initial stub icon.
 * 0.0.3-SNAPSHOT - Fixes problem with classified artifacts. Added Java and Tracking configuration.
 * 0.0.4-SNAPSHOT - Fixes problem when Java configuration is only added to getdown.txt of stub directory. Adds Java configuration to getdown.txt of update directory.
+* 0.9.0-SNAPSHOT - Now binds to package phase by default. Update to Getdown 1.8.x and other pull requests. Thanks to all contributors. 
 
 ## Goals
 
-* `updates` Generates update directory
-* `stubs` Generates stubs directory for building installers
-* `applet` Generates applet template directory (with signed getdown jar)
+* `updates` Generates update directory. By default bound to package phase.
+* `stubs` Generates stubs directory for building installers. Must bind to phase yourself.
+* `applet` Generates applet template directory (with signed getdown jar). Must bind to phase yourself. 
 
 ## Usage
 
-This plugin is currently available as a SNAPSHOT only from the location below  :-
-
-```
-	<pluginRepositories>
-		<pluginRepository>
-			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-```
-
-And add the plugin configuration and bind it to the package phase.
+This plugin is now available on Maven Central, so configuration of the `<pluginRepostitory>..</pluginRepostitory>` is no longer required, so simply add the required plugin configuration.
 
 ```
 	<plugin>
 		<groupId>org.icestuff</groupId>
 		<artifactId>getdown-maven-plugin</artifactId>
-		<version>0.0.3-SNAPSHOT</version>
+		<version>0.9.0</version>
 		<executions>
 			<execution>
-				<phase>package</phase>
-				<goals>
-					<goal>updates</goal>
-				</goals>
 				<configuration>
 					<!-- This is the minimum required configuration, see below for more -->
 					<appbase>http://myserver.com/myapp/getdown</appbase>	
@@ -169,13 +151,13 @@ and  [getdown-maven-example2](https://github.com/rockfireredmoon/getdown-maven-e
 	<name>Getdown Maven Example 1</name>
 	<description>Simples Example POM, builds update directory and manifest</description>
 	<groupId>org.icestuff</groupId>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.9.0</version>
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.icestuff</groupId>
 				<artifactId>getdown-maven-plugin</artifactId>
-				<version>0.0.3-SNAPSHOT</version>
+				<version>0.9.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -537,16 +519,6 @@ The following example uses some other Maven plugins to spit out stub installers 
 			</plugin>
 		</plugins>
 	</build>
-	<pluginRepositories>
-		<pluginRepository>
-			<id>getdown-maven-plugin-mvn-repo</id>
-			<url>https://raw.github.com/rockfireredmoon/getdown-maven-plugin/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
 	<repositories>
 		<repository>
 			<id>codehaus-snapshots</id>
