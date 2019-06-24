@@ -47,8 +47,8 @@ public class MakeStub extends AbstractGetdownMojo {
 
 	protected void copyGetdownClient() throws MojoExecutionException {
 		getLog().info("Copying client jar");
-        Artifact getdown = (Artifact) plugin.getArtifactMap().get("com.threerings:getdown");
-		Util.copyFile(getdown.getFile(), new File(stubWorkDirectory, "getdown.jar"));
+		Artifact getdown = (Artifact) plugin.getArtifactMap().get("com.threerings.getdown:getdown-launcher");
+		Util.copyFile(getdown.getFile(), new File(workDirectory, "getdown.jar"));
 	}
 
 	protected void makeConfigFile() throws FileNotFoundException {
@@ -65,6 +65,7 @@ public class MakeStub extends AbstractGetdownMojo {
 			writer.println();
 			writeJavaConfiguration(writer);
 			writeTrackingConfiguration(writer);
+			writeMaxConcurrentDownloads(writer);
 		} finally {
 			writer.close();
 		}

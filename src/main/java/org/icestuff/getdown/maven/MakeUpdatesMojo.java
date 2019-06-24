@@ -87,6 +87,16 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	@Parameter(defaultValue = "false")
 	private boolean allowOffline;
 
+	/**
+	 * The maximum number of downloads allowed to happen at once.
+	 * Defaults to the number of cores in your CPU - 1
+	 * <p>
+	 * If you're having issues, that you suspect are related to concurrency,
+	 * setting this to 1 might help.
+	 */
+	@Parameter
+	private Integer maxConcurrentDownloads;
+
 	@Parameter
 	private String[] appargs;
 
@@ -224,7 +234,7 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 			for (Artifact s : packagedJnlpArtifacts) {
 				String name = "";
-				if (!libPath.equals("")) {
+				if (libPath != null && !libPath.equals("")) {
 					name = libPath + "/";
 				}
 				name += getDependencyFileBasename(s, outputJarVersions);
@@ -265,6 +275,11 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 				}
 			}
 
+			if (maxConcurrentDownloads != null) {
+				writer.println();
+				writer.println("# The maximum number of downloads allowed to happen at the same time.");
+				writer.println(String.format("max_concurrent_downloads = %s", maxConcurrentDownloads));
+			}
 		} finally {
 			writer.close();
 		}
