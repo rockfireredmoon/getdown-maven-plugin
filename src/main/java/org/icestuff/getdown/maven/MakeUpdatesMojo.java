@@ -8,6 +8,7 @@ import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.IncludesArtifactFilter;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
@@ -27,7 +28,7 @@ import java.util.List;
 /**
  * Make deployable Java apps.
  */
-@Mojo(name = "updates", aggregator = true, requiresDependencyResolution = ResolutionScope.RUNTIME)
+@Mojo(name = "updates", aggregator = true, requiresDependencyResolution = ResolutionScope.RUNTIME, defaultPhase = LifecyclePhase.PACKAGE)
 public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 	/**
@@ -187,7 +188,9 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 			if (artifactWithMainClass == null && !ignoreMissingMain) {
 				throw new MojoExecutionException(
-						"didn't find artifact with main class: " + mainClass + ". Did you specify it? ");
+						"didn't find artifact with main class: " + mainClass + ". Did you specify it? If your main() "
+								+ "method is in a sub project, this plugin will not be able to find it. As a work-around, "
+								+ "you can add <ignoreMissingMain>true</ignoreMissingMain> to your plugin <configuration>.");
 			}
 
 			copyResourceSets();
