@@ -37,7 +37,8 @@ based on [Webstart Maven Plugin](http://mojo.codehaus.org/webstart/webstart-mave
 
 ## Usage
 
-This plugin is now available on Maven Central, so configuration of the `<pluginRepostitory>..</pluginRepostitory>` is no longer required, so simply add the required plugin configuration.
+This plugin is available on Maven Central, so simply add the required plugin configuration for the **appbase** and
+**mainClass**.
 
 ```
 	<plugin>
