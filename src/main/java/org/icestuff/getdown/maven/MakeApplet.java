@@ -57,7 +57,7 @@ public class MakeApplet extends AbstractGetdownMojo {
 
 	protected void copyGetdownClient() throws MojoExecutionException {
 		getLog().info("Copying client jar");
-		Artifact getdown = (Artifact) plugin.getArtifactMap().get("com.threerings:getdown");
+		Artifact getdown = (Artifact) plugin.getArtifactMap().get("com.threerings.getdown:getdown-launcher");
 		Util.copyFile(getdown.getFile(), getClientJarFile());
 	}
 
