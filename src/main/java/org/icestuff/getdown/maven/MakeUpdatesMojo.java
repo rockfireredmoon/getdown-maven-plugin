@@ -280,6 +280,10 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 				writer.println("# The maximum number of downloads allowed to happen at the same time.");
 				writer.println(String.format("max_concurrent_downloads = %s", maxConcurrentDownloads));
 			}
+			
+			writer.println();
+			writeJavaConfiguration(writer);
+			
 		} finally {
 			writer.close();
 		}
