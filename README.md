@@ -110,23 +110,23 @@ All tags may also copy resources to different paths to which they are stored in 
 		</resource>
 		<resource>
 			<!-- Path to a directory -->
-			<path>images/**/*</path>
+			<path>images</path>
 		</resource>
 		<resource>
 			<!-- Path to a directory, excluding some files -->
-			<path>documentation/**/*</path>
+			<path>documentation</path>
 			<excludes>
 				<exclude>**/*.doc</exclude>
 			</excludes>
 		</resource>
 		<resource>
 			<!-- Path to a directory, all matched files in a single target directory -->
-			<path>game-data/**/*</path>
+			<path>game-data</path>
 			<destination>data</destination>
 		</resource>
 		<resource>
 			<!-- Path to a directory, all matched files in a single target directory -->
-			<path>game-data/**/*</path>
+			<path>game-data</path>
 			<destination>data</destination>
 		</resource>
 	</resources>
@@ -151,7 +151,10 @@ All tags may also copy resources to different paths to which they are stored in 
 		
 		<nresource>
 			<!-- Path to a directory, for a single arch -->
-			<path>deps-64/**/*.dll</path>
+			<path>deps-64</path>
+			<includes>
+				<include>**/*.dll</include>
+			</includes>
 			<platform>windows-amd64</platform>
 		</nresource>
 	</nresources>
