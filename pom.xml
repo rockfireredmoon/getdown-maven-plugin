@@ -11,6 +11,8 @@
 	<properties>
 		<github.global.server>github</github.global.server>
 		<getdown.version>1.8.6</getdown.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<description>Creates deployable, updateable java applications using Getdown (https://github.com/threerings/getdown/).</description>
@@ -187,7 +189,7 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>3.9</version>
-		</dependency> 
+		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-plugin-plugin</artifactId>
