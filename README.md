@@ -125,9 +125,9 @@ All tags may also copy resources to different paths to which they are stored in 
 			<destination>data</destination>
 		</resource>
 		<resource>
-			<!-- Path to a directory, all matched files in a single target directory -->
-			<path>game-data</path>
-			<destination>data</destination>
+			<!-- Path to a directory, all matched files in a single target directory matching the source heirarchy -->
+			<path>other-data</path>
+			<prefix>data</prefix>
 		</resource>
 	</resources>
 	
