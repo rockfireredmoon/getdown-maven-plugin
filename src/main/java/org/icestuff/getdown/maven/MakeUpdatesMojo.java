@@ -1,6 +1,16 @@
 package org.icestuff.getdown.maven;
 
-import com.threerings.getdown.tools.Digester;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
@@ -14,16 +24,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.codehaus.plexus.util.DirectoryScanner;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.threerings.getdown.tools.Digester;
 
 /**
  * Make deployable Java apps.
@@ -64,8 +65,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 	/**
 	 * [optional] transitive dependencies filter - if omitted, the plugin will
-	 * include all transitive dependencies. Provided and test scope dependencies
-	 * are always excluded.
+	 * include all transitive dependencies. Provided and test scope dependencies are
+	 * always excluded.
 	 */
 	@Parameter
 	private Dependencies dependencies;
@@ -80,20 +81,20 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	private boolean ignoreMissingMain;
 
 	/**
-	 * By default, Getdown will fail if it is running a non-versioned
-	 * application and cannot contact the server configured in appbase to check
-	 * for updates. If you add allow_offline = true to your getdown.txt, Getdown
-	 * will ignore such failures and allow the application to be run anyway.
+	 * By default, Getdown will fail if it is running a non-versioned application
+	 * and cannot contact the server configured in appbase to check for updates. If
+	 * you add allow_offline = true to your getdown.txt, Getdown will ignore such
+	 * failures and allow the application to be run anyway.
 	 */
 	@Parameter(defaultValue = "false")
 	private boolean allowOffline;
 
 	/**
-	 * The maximum number of downloads allowed to happen at once.
-	 * Defaults to the number of cores in your CPU - 1
+	 * The maximum number of downloads allowed to happen at once. Defaults to the
+	 * number of cores in your CPU - 1
 	 * <p>
-	 * If you're having issues, that you suspect are related to concurrency,
-	 * setting this to 1 might help.
+	 * If you're having issues, that you suspect are related to concurrency, setting
+	 * this to 1 might help.
 	 */
 	@Parameter
 	private Integer maxConcurrentDownloads;
@@ -107,19 +108,24 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	 * When set to true, this flag indicates that a version attribute should be
 	 * output in each of the jar resource elements in the generated JNLP file.
 	 * <p/>
-	 * <strong>Note: </strong> since version 1.0-beta-5 we use the version
-	 * download protocol optimization (see
-	 * http://docs.oracle.com/javase/tutorial
+	 * <strong>Note: </strong> since version 1.0-beta-5 we use the version download
+	 * protocol optimization (see http://docs.oracle.com/javase/tutorial
 	 * /deployment/deploymentInDepth/avoidingUnnecessaryUpdateChecks.html).
 	 */
 	@Parameter(defaultValue = "false")
 	private boolean outputJarVersions;
 
 	@Parameter()
-	private ResourceSet[] resourceSets;
+	private ResourceSet[] resources;
 
 	@Parameter()
-	private ResourceSet[] uresourceSets;
+	private ResourceSet[] uresources;
+
+	@Parameter()
+	private NResourceSet[] nresources;
+
+	@Parameter()
+	private ResourceSet[] xresources;
 
 	public static class ResourceSet {
 
@@ -127,10 +133,52 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 		private String path;
 
 		@Parameter
+		private String destination;
+
+		@Parameter
+		private String prefix;
+
+		@Parameter
 		private String[] includes;
 
 		@Parameter
 		private String[] excludes;
+
+		public String getPath() {
+			return path;
+		}
+
+		public String getDestination() {
+			return destination;
+		}
+
+		public String getPrefix() {
+			return prefix;
+		}
+
+		public String[] getIncludes() {
+			return includes;
+		}
+
+		public String[] getExcludes() {
+			return excludes;
+		}
+	}
+
+	public static class NResourceSet extends ResourceSet {
+
+		/**
+		 * The platform this resource set is for (alternative to platforms)
+		 */
+		@Parameter(property = "platform")
+		private String platform;
+
+		/**
+		 * The platforms this resource set is for (alternative to platform)
+		 */
+		@Parameter(property = "platforms")
+		private String[] platforms;
+
 	}
 
 	/**
@@ -165,10 +213,10 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	private Artifact artifactWithMainClass;
 	private List<Artifact> packagedJnlpArtifacts = new ArrayList<Artifact>();
 	private final List<String> modifiedJnlpArtifacts = new ArrayList<String>();
-
 	private List<String> uresourceSetPaths;
-
+	private List<NResourcePath> nresourceSetPaths;
 	private List<String> resourceSetPaths;
+	private List<String> xresourceSetPaths;
 
 	public void execute() throws MojoExecutionException {
 
@@ -180,17 +228,17 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 		try {
 			initSign();
-			Util.copyResources(getLog(), getResourcesDirectory(), workDirectory);
+			Util.copyResources(getLog(), getResourcesDirectory(), workDirectory, null, null);
 
 			artifactWithMainClass = null;
 
 			processDependencies();
 
 			if (artifactWithMainClass == null && !ignoreMissingMain) {
-				throw new MojoExecutionException(
-						"didn't find artifact with main class: " + mainClass + ". Did you specify it? If your main() "
-								+ "method is in a sub project, this plugin will not be able to find it. As a work-around, "
-								+ "you can add <ignoreMissingMain>true</ignoreMissingMain> to your plugin <configuration>.");
+				throw new MojoExecutionException("didn't find artifact with main class: " + mainClass
+						+ ". Did you specify it? If your main() "
+						+ "method is in a sub project, this plugin will not be able to find it. As a work-around, "
+						+ "you can add <ignoreMissingMain>true</ignoreMissingMain> to your plugin <configuration>.");
 			}
 
 			copyResourceSets();
@@ -204,11 +252,57 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	}
 
 	protected void copyResourceSets() throws MojoExecutionException {
-		if (resourceSets != null) {
-			resourceSetPaths = copyResourceSets(resourceSets);
+		if (resources != null) {
+			resourceSetPaths = copyResourceSets(resources);
 		}
-		if (uresourceSets != null) {
-			uresourceSetPaths = copyResourceSets(uresourceSets);
+		if (uresources != null) {
+			uresourceSetPaths = copyResourceSets(uresources);
+		}
+		if (nresources != null) {
+			nresourceSetPaths = new ArrayList<NResourcePath>();
+			for (NResourceSet s : nresources) {
+				if (StringUtils.isBlank(s.getPath()))
+					throw new MojoExecutionException("<path> must be provided for a resource in a resource set.");
+				File source = new File(s.getPath());
+				if (!source.exists()) {
+					getLog().info("File does not exist " + source.getAbsolutePath());
+				} else {
+					if (source.isDirectory()) {
+						getLog().info("Copying resource set from " + source.getAbsolutePath());
+
+						String include = s.getIncludes() == null ? "**" : Util.concat(s.getIncludes(), ", ");
+						String excludes = s.getExcludes() == null ? Util.concat(DirectoryScanner.DEFAULTEXCLUDES, ", ")
+								: (Util.concat(DirectoryScanner.DEFAULTEXCLUDES, ", ")
+										+ Util.concat(s.getExcludes(), ", "));
+
+						for (String p : Util.copyDirectoryStructure(getLog(), source, workDirectory, include, excludes,
+								s.getDestination(), s.getPrefix())) {
+							if (s.platform != null)
+								nresourceSetPaths.add(new NResourcePath(s.platform, p));
+							if (s.platforms != null) {
+								for (String platform : s.platforms) {
+									nresourceSetPaths.add(new NResourcePath(platform, p));
+								}
+							}
+						}
+					} else {
+						getLog().info("File: " + source.getAbsolutePath());
+						String p = Util.copyFile(getLog(), source, workDirectory, s.getDestination(), s.getPrefix());
+						if (s.platform != null)
+							nresourceSetPaths.add(new NResourcePath(s.platform, p));
+						if (s.platforms != null) {
+							for (String platform : s.platforms) {
+								nresourceSetPaths.add(new NResourcePath(platform, p));
+							}
+						}
+					}
+
+				}
+			}
+			getLog().info("NResources: " + nresourceSetPaths);
+		}
+		if (xresources != null) {
+			xresourceSetPaths = copyResourceSets(xresources);
 		}
 
 		copyUIResources();
@@ -265,6 +359,22 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 				writer.println();
 			}
 
+			if (xresourceSetPaths != null) {
+				writer.println("# Executable Resources");
+				for (String p : xresourceSetPaths) {
+					writer.println(String.format("xresource = %s", p));
+				}
+				writer.println();
+			}
+
+			if (nresourceSetPaths != null) {
+				writer.println("# Native Resources");
+				for (NResourcePath p : nresourceSetPaths) {
+					writer.println(String.format("resource = [%s] %s", p.platform, p.resource));
+				}
+				writer.println();
+			}
+
 			writer.println("# The main entry point for the application");
 			writer.println(String.format("class = %s", mainClass));
 			if (appargs != null) {
@@ -277,16 +387,16 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 					writer.println(String.format("jvmarg = %s", s));
 				}
 			}
-			
+
 			if (maxConcurrentDownloads != null) {
 				writer.println();
 				writer.println("# The maximum number of downloads allowed to happen at the same time.");
 				writer.println(String.format("max_concurrent_downloads = %s", maxConcurrentDownloads));
 			}
-			
+
 			writer.println();
 			writeJavaConfiguration(writer);
-			
+
 		} finally {
 			writer.close();
 		}
@@ -331,9 +441,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	/**
 	 * Detects improper includes/excludes configuration.
 	 * 
-	 * @throws MojoExecutionException
-	 *             if at least one of the specified includes or excludes matches
-	 *             no artifact, false otherwise
+	 * @throws MojoExecutionException if at least one of the specified includes or
+	 *                                excludes matches no artifact, false otherwise
 	 */
 	void checkDependencies() throws MojoExecutionException {
 		if (dependencies == null) {
@@ -342,6 +451,7 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 		boolean failed = false;
 
+		@SuppressWarnings("unchecked")
 		Collection<Artifact> artifacts = project.getArtifacts();
 
 		getLog().debug("artifacts: " + artifacts.size());
@@ -360,12 +470,11 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	}
 
 	/**
-	 * Iterate through all the top level and transitive dependencies declared in
-	 * the project and collect all the runtime scope dependencies for inclusion
-	 * in the .zip and signing.
+	 * Iterate through all the top level and transitive dependencies declared in the
+	 * project and collect all the runtime scope dependencies for inclusion in the
+	 * .zip and signing.
 	 * 
-	 * @throws MojoExecutionException
-	 *             if could not process dependencies
+	 * @throws MojoExecutionException if could not process dependencies
 	 */
 	private void processDependencies() throws MojoExecutionException {
 
@@ -381,6 +490,7 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 			filter.add(new ExcludesArtifactFilter(dependencies.getExcludes()));
 		}
 
+		@SuppressWarnings("unchecked")
 		Collection<Artifact> artifacts = excludeTransitive ? project.getDependencyArtifacts() : project.getArtifacts();
 
 		for (Artifact artifact : artifacts) {
@@ -509,12 +619,10 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	}
 
 	/**
-	 * @param patterns
-	 *            list of patterns to test over artifacts
-	 * @param artifacts
-	 *            collection of artifacts to check
-	 * @return true if at least one of the pattern in the list matches no
-	 *         artifact, false otherwise
+	 * @param patterns  list of patterns to test over artifacts
+	 * @param artifacts collection of artifacts to check
+	 * @return true if at least one of the pattern in the list matches no artifact,
+	 *         false otherwise
 	 */
 	private boolean checkDependencies(List<String> patterns, Collection<Artifact> artifacts) {
 		if (dependencies == null) {
@@ -529,10 +637,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	}
 
 	/**
-	 * @param pattern
-	 *            pattern to test over artifacts
-	 * @param artifacts
-	 *            collection of artifacts to check
+	 * @param pattern   pattern to test over artifacts
+	 * @param artifacts collection of artifacts to check
 	 * @return true if filter matches no artifact, false otherwise *
 	 */
 	private boolean ensurePatternMatchesAtLeastOneArtifact(String pattern, Collection<Artifact> artifacts) {
@@ -575,21 +681,22 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	private List<String> copyResourceSets(ResourceSet[] resourceSets) throws MojoExecutionException {
 		List<String> paths = new ArrayList<String>();
 		for (ResourceSet s : resourceSets) {
-			File sourceDirectory = new File(s.path);
+			if (StringUtils.isBlank(s.getPath()))
+				throw new MojoExecutionException("<path> must be provided for a resource in a resource set.");
+			File sourceDirectory = new File(s.getPath());
 			if (!sourceDirectory.exists()) {
-				getLog().info("Directory does not exist " + sourceDirectory.getAbsolutePath());
+				getLog().info("File does not exist " + sourceDirectory.getAbsolutePath());
 			} else {
-				if (!sourceDirectory.isDirectory()) {
-					getLog().debug("Not a directory: " + sourceDirectory.getAbsolutePath());
-				} else {
-					getLog().debug("Copying resource set from " + sourceDirectory.getAbsolutePath());
-
+				if (sourceDirectory.isDirectory()) {
 					String include = s.includes == null ? "**" : Util.concat(s.includes, ", ");
 					String excludes = s.excludes == null ? Util.concat(DirectoryScanner.DEFAULTEXCLUDES, ", ")
 							: (Util.concat(DirectoryScanner.DEFAULTEXCLUDES, ", ") + Util.concat(s.excludes, ", "));
 
-					paths.addAll(
-							Util.copyDirectoryStructure(getLog(), sourceDirectory, workDirectory, include, excludes));
+					paths.addAll(Util.copyDirectoryStructure(getLog(), sourceDirectory, workDirectory, include,
+							excludes, s.getDestination(), s.getPrefix()));
+				} else {
+					paths.add(
+							Util.copyFile(getLog(), sourceDirectory, workDirectory, s.getDestination(), s.getPrefix()));
 				}
 
 			}
@@ -600,14 +707,11 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 	/**
 	 * Tests if the given fully qualified name exists in the given artifact.
 	 * 
-	 * @param artifact
-	 *            artifact to test
-	 * @param mainClass
-	 *            the fully qualified name to find in artifact
-	 * @return {@code true} if given artifact contains the given fqn,
-	 *         {@code false} otherwise
-	 * @throws MojoExecutionException
-	 *             if artifact file url is mal formed
+	 * @param artifact  artifact to test
+	 * @param mainClass the fully qualified name to find in artifact
+	 * @return {@code true} if given artifact contains the given fqn, {@code false}
+	 *         otherwise
+	 * @throws MojoExecutionException if artifact file url is mal formed
 	 */
 
 	public boolean artifactContainsClass(Artifact artifact, final String mainClass) throws MojoExecutionException {
@@ -657,5 +761,22 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 		}
 
 		return containsClass;
+	}
+
+	class NResourcePath {
+		private String platform;
+		private String resource;
+
+		public NResourcePath(String platform, String resource) {
+			super();
+			this.platform = platform;
+			this.resource = resource;
+		}
+
+		@Override
+		public String toString() {
+			return "NResourcePath [platform=" + platform + ", resource=" + resource + "]";
+		}
+
 	}
 }

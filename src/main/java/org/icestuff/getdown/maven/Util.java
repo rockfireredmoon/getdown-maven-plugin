@@ -40,7 +40,7 @@ public class Util {
 	}
 
 	protected static List<String> copyDirectoryStructure(Log log, File sourceDirectory, File destinationDirectory,
-			String includes, String excludes) throws MojoExecutionException {
+			String includes, String excludes, String dest, String prefix) throws MojoExecutionException {
 		if (!sourceDirectory.exists()) {
 			throw new MojoExecutionException(sourceDirectory + " does not exist.");
 		}
@@ -53,33 +53,103 @@ public class Util {
 			throw new MojoExecutionException("Could not obtain files from " + sourceDirectory, e);
 		}
 
-		for (File file : files) {
+		for (File source : files) {
 
-			log.debug("Copying " + file + " to " + destinationDirectory);
+			File destination;
 
-			String path = file.getAbsolutePath().substring(sourceDirectory.getAbsolutePath().length() + 1);
-
-			File destDir = new File(destinationDirectory, path);
-
-			log.debug("Copying " + file + " to " + destDir);
-
-			if (file.isDirectory()) {
-				makeDirectoryIfNecessary(destDir);
+			if (dest != null) {
+				/* Copy everything to specific dest directory */
+				destination = new File(dest);
+				if (!destination.isAbsolute()) {
+					destination = new File(destinationDirectory, dest);
+				}
 			} else {
+				String path = source.getAbsolutePath().substring(sourceDirectory.getAbsolutePath().length() + 1);
+				if (prefix != null) {
+					destination = new File(prefix);
+					/* Copy to a path prefixed by prefix */
+					if (destination.isAbsolute()) {
+						destination = new File(destination, path);
+					} else {
+						destination = new File(destinationDirectory, prefix + File.separator + path);
+					}
+				} else {
+					/* Just copy to same path in destination directory */
+					destination = new File(destinationDirectory, path);
+				}
+			}
+
+			if (source.isDirectory()) {
+				makeDirectoryIfNecessary(destination);
+			} else {
+				File destFile = new File(destination.getParentFile(), source.getName());
 				try {
-					paths.add(AbstractGetdownMojo.getRelativePath(sourceDirectory, file));
+					paths.add(AbstractGetdownMojo.getRelativePath(destinationDirectory, destFile));
 				} catch (IOException e) {
 					throw new MojoExecutionException(
-							"Could not relativize path of " + file + " from " + sourceDirectory, e);
+							"Could not relativize path of " + source + " from " + sourceDirectory, e);
 				}
 				try {
-					FileUtils.copyFileToDirectory(file, destDir.getParentFile());
+					FileUtils.copyFileToDirectory(source, destination.getParentFile());
 				} catch (IOException e) {
-					throw new MojoExecutionException("Could not copy file " + file + " to directory" + destDir, e);
+					throw new MojoExecutionException("Could not copy file " + source + " to directory" + destination, e);
 				}
 			}
 		}
 		return paths;
+	}
+
+	protected static String copyFile(Log log, File file, File destinationDirectory, String dest, String prefix)
+			throws MojoExecutionException {
+		if (!file.exists()) {
+			throw new MojoExecutionException(file + " does not exist.");
+		}
+
+		if (file.isDirectory()) {
+			throw new MojoExecutionException(file + " is a directory.");
+		}
+
+		log.info("Copying " + file + " to " + destinationDirectory);
+
+		File destDir;
+
+		if (dest != null) {
+			/* Copy everything to specific dest directory */
+			destDir = new File(dest);
+			if (!destDir.isAbsolute()) {
+				destDir = new File(destinationDirectory, dest);
+			}
+		} else {
+			if (prefix != null) {
+				destDir = new File(prefix);
+				/* Copy to a path prefixed by prefix */
+				if (destDir.isAbsolute()) {
+					destDir = new File(destDir, file.getPath());
+				} else {
+					destDir = new File(destinationDirectory, prefix + File.separator + file.getPath());
+				}
+			} else {
+				/* Just copy to same path in destination directory */
+				destDir = new File(destinationDirectory, file.getPath());
+			}
+		}
+
+		log.info("Copying " + file + " to " + destDir);
+
+		try {
+			FileUtils.copyFileToDirectory(file, destDir.getParentFile());
+		} catch (IOException e) {
+			throw new MojoExecutionException("Could not copy file " + file + " to directory" + destDir, e);
+		}
+
+		try {
+			File parfile = new File(destDir.getParentFile(), file.getName());
+			String relativePath = AbstractGetdownMojo.getRelativePath(destinationDirectory, parfile);
+			log.info("Relative path of " + destinationDirectory + " vs " + parfile + " is " + relativePath);
+			return relativePath;
+		} catch (IOException e) {
+			throw new MojoExecutionException("Could not relativize path of " + file + " from " + file, e);
+		}
 	}
 
 	protected static String concat(String[] array, String delim) {
@@ -94,19 +164,16 @@ public class Util {
 		return buffer.toString();
 	}
 
-	protected static void copyResources(Log log, File sourceDirectory, File targetDirectory)
+	protected static void copyResources(Log log, File sourceDirectory, File targetDirectory, String dest, String prefix)
 			throws MojoExecutionException {
 		if (!sourceDirectory.exists()) {
-			log.info("Directory does not exist " + sourceDirectory.getAbsolutePath());
+			log.warn("Directory does not exist " + sourceDirectory.getAbsolutePath());
 		} else {
 			if (!sourceDirectory.isDirectory()) {
 				log.debug("Not a directory: " + sourceDirectory.getAbsolutePath());
 			} else {
 				log.debug("Copying resources from " + sourceDirectory.getAbsolutePath());
-
-				// this may needs to be parametrized somehow
-				String excludes = concat(DirectoryScanner.DEFAULTEXCLUDES, ", ");
-				copyDirectoryStructure(log, sourceDirectory, targetDirectory, "**", excludes);
+				copyDirectoryStructure(log, sourceDirectory, targetDirectory, "**", concat(DirectoryScanner.DEFAULTEXCLUDES, ", "), dest, prefix);
 			}
 
 		}

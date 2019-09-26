@@ -216,18 +216,28 @@ public class SignConfig {
 		// sign the digest file
 		Signature sig = Signature.getInstance("SHA1withRSA");
 		FileInputStream dataInput = new FileInputStream(inputFile);
-		byte[] buffer = new byte[8192];
-		int length;
-
-		sig.initSign(key);
-		while ((length = dataInput.read(buffer)) != -1) {
-			sig.update(buffer, 0, length);
+		try {
+			byte[] buffer = new byte[8192];
+			int length;
+	
+			sig.initSign(key);
+			while ((length = dataInput.read(buffer)) != -1) {
+				sig.update(buffer, 0, length);
+			}
+		}
+		finally {
+			dataInput.close();
 		}
 
 		// Write out the signature
 		FileOutputStream signatureOutput = new FileOutputStream(signatureFile);
-		String signed = new String(Base64.encodeBase64(sig.sign()));
-		signatureOutput.write(signed.getBytes("utf8"));
+		try {
+			String signed = new String(Base64.encodeBase64(sig.sign()));
+			signatureOutput.write(signed.getBytes("utf8"));
+		}
+		finally {
+			signatureOutput.close();
+		}
 	}
 
 	/**
