@@ -4,7 +4,7 @@
 	<artifactId>getdown-maven-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
 	<name>Getdown Maven Plugin</name>
-	<version>0.9.1</version>
+	<version>0.9.2-SNAPSHOT</version>
 
 	<properties>
 		<github.global.server>github</github.global.server>
@@ -19,7 +19,7 @@
 		<connection>scm:git:git://github.com/rockfireredmoon/getdown-maven-plugin.git</connection>
 		<developerConnection>scm:git:git@github.com:rockfireredmoon/rockfireredmoon.git</developerConnection>
 		<url>https://github.com/rockfireredmoon/getdown-maven-plugin</url>
-		<tag>getdown-maven-plugin-0.9.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<developers>
