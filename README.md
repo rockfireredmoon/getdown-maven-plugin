@@ -46,7 +46,7 @@ This plugin is available on Maven Central, so simply add the required plugin con
 	<plugin>
 		<groupId>org.icestuff</groupId>
 		<artifactId>getdown-maven-plugin</artifactId>
-		<version>0.9.0</version>
+		<version>0.9.1</version>
 		<executions>
 			<execution>
 				<configuration>
