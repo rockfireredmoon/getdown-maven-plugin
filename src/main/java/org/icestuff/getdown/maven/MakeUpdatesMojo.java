@@ -101,6 +101,8 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 
 	@Parameter
 	private String[] appargs;
+	@Parameter 
+	private EntryPoint[] alternativeEntryPoints;
 
 	@Parameter
 	private String[] jvmargs;
@@ -207,6 +209,17 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 		public void setExcludes(List<String> excludes) {
 			this.excludes = excludes;
 		}
+	}
+	public static class EntryPoint
+	{
+		@Parameter(required=true)
+		private String appId;
+ 
+		@Parameter(required=true)
+		private String mainClass;
+
+		@Parameter
+		private String[] appargs;
 	}
 
 	//
@@ -385,6 +398,17 @@ public class MakeUpdatesMojo extends AbstractGetdownMojo {
 			if (jvmargs != null) {
 				for (String s : jvmargs) {
 					writer.println(String.format("jvmarg = %s", s));
+				}
+			}
+			
+			if (alternativeEntryPoints != null) {
+				writer.println("\n# Alternative entry points");
+				for (EntryPoint ep: alternativeEntryPoints) {
+					writer.println(String.format("%s.class = %s", ep.appId, ep.mainClass));
+
+					for (String apparg: ep.appargs) {
+						writer.println(String.format("%s.apparg = %s", ep.appId, apparg));
+					}
 				}
 			}
 
